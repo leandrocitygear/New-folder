@@ -10,13 +10,13 @@ def counter():
     count += 1
     return count
 
-list = []
+player_ids = []
 
 for i in range(100000):
    list.append(counter())
 
 
-player_id = random.choice(list)
+player_id = random.choice(player_ids)
 
 name = str(input('Enter your name: '))
 age = int(input('Enter your Age: '))
