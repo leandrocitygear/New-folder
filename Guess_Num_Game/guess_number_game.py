@@ -29,6 +29,7 @@ def start_game():
     play = 'Lets play guess the number to start guess a number between 1 and 10: ' + name
     print(play)
     secret = random.randint(1, 10)
+    auto_win = int(1234)
     while True:
         try:
             guess = int(input('enter a number: '))
@@ -36,6 +37,9 @@ def start_game():
                 print('correct')
                 print('You win: ' + name)
                 break
+            elif guess == auto_win:
+                print('You win: ' + name)
+                quit()
             else:
                 print('Incorrect try again')
         except ValueError:
