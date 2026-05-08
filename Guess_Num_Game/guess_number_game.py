@@ -1,17 +1,11 @@
 from datetime import date
 import random
+
 date = date.today()
 formatted_date = date.strftime("%B %d, %Y")
 
-# count = 0
-
-# def counter():
-#     global count
-#     count += 1
-#     return count
 
 player_ids = list(range(1, 100001))
-
 
 player_id = random.choice(player_ids)
 
@@ -20,8 +14,6 @@ age = int(input('Enter your Age: '))
 location = str(input('Where do you live: '))
 welcome = 'Welcome to Guess the number Game ' + name 
 
-if age < 18:
-    print('too young')
 
 print(f'''
 Hello: {name} 
@@ -52,15 +44,18 @@ def start_game():
 
 
 def play_again():
-    print('Type [1 for yes] or [0 for no]')
-    again = input('would you like to play again (y/n): ').lower()
+    again = input('would you like to play again ? or would you like to play some else ? (y/n/m): ').lower()
+
     try:
         
         if again == 'y':
             return start_game()
+        elif again == 'm':
+            print('something new')
         else:
             print('game over')
 
     except ValueError:
         print('please enter (y/n): ')
+
 start_game()
