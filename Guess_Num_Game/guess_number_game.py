@@ -56,7 +56,10 @@ def start_game():
             level_3 = play_level('LEVEL 3 (1-10)', 1, 10)
 
             if level_3:
-                print(f'Congratulations {name}, you beat the game!')
+                level_legendary = play_level('LEVEL LEGENDARY (1-20)', 1, 20)
+
+                if level_legendary:
+                    print(f'Congratulations {name}, you beat the game!')
    
 
 def play_again():
