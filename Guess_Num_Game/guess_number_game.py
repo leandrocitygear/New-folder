@@ -1,11 +1,6 @@
-from datetime import date
 import random
-import soundfile
 import sounddevice
 import play_song
-
-
-
 
 play_song.play_game_song()
 name = str(input('Enter your name: '))
