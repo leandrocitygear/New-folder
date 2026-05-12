@@ -7,58 +7,71 @@ import play_song
 
 
 
-# play_song.play_game_song()
+play_song.play_game_song()
 name = str(input('Enter your name: '))
 
+def play_level(level_name, min_num, max_num):
+    print(level_name)
 
+    secret_number = random.randint(min_num, max_num)
+    limited_attempts = 3
+    auto_win = 1234
 
-def start_game():
-
-    play = 'Lets play guess the number to start guess a number between 1 and 10: ' + name
-    rules = 'Guess the number you get 3 attempts good luck'
-    level1 = 'level 1 pick betweeen 1 and 3'
-    print(play)
-    print(rules)
-    print(level1)
-    secret = random.randint(1, 4)
-    auto_win = int(1234)
-    limited_attempts = int(0)
-    while True:
+    while limited_attempts > 0:
         try:
-            guess = int(input('enter a number: '))
-            if guess == secret:
+            guess = int(input(f'Enter a number between {min_num} and {max_num}: '))
+
+            if guess == secret_number:
                 print('correct')
-                print('You win: ' + name)
-                break
+                return True
+            
             elif guess == auto_win:
                 print('You win: ' + name)
-                quit()
+                return False
+
             else:
-                limited_attempts += 1
-                print(f'Incorrect try again you have: {3 - limited_attempts} left')
-                if limited_attempts == 3:
+                limited_attempts -= 1
+
+                if limited_attempts > 0:
+                    print(f'Incorrect you have: {limited_attempts} attempts left')
+
+                else:
                     print('game over')
-                    break
+                    print(f'The correct number was: {secret_number}')
+                    return False
+                
         except ValueError:
             print('Please enter a number')
-    play_again()
 
+def start_game():
+    print(f'Lets play Guess The Number, {name}!')
+    print('You get 3 attemps per level.')
+
+    level_1 = play_level('LEVEL 1 (1-3)', 1, 3)
+
+    if level_1:
+        level_2 = play_level('LEVEL 2 (1-6)', 1, 6)
+
+        if level_2:
+            level_3 = play_level('LEVEL 3 (1-10)', 1, 10)
+
+            if level_3:
+                print(f'Congratulations {name}, you beat the game!')
+   
 
 def play_again():
-    again = input('would you like to play again ? (y/n): ').lower()
+    while True:
+        again = input('would you like to play again ? (y/n): ').lower()
 
-    try:
-        
         if again == 'y':
-            return start_game()
-        elif again == 'm':
-            print('something new')
+            start_game()
+        
+        elif again == 'n':
+            print('Thank you for playing!')
             sounddevice.stop()
+            break
         else:
-            print('game over')
-            sounddevice.stop()
-
-    except ValueError:
-        print('please enter (y/n): ')
+            print('please enter (y/n): ')
 
 start_game()
+play_again()
