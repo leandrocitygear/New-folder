@@ -15,7 +15,7 @@ class GuessNumberGame(QWidget):
         super().__init__()
 
         self.setWindowTitle('Guess The Number')
-        self.resize(400, 450)
+        self.resize(450, 500)
 
         layout = QVBoxLayout()
 
@@ -25,5 +25,15 @@ app = QApplication(sys.argv)
 
 window = GuessNumberGame()
 window.show()
+
+# window = QWidget()
+# window.resize(800, 500)
+window.setStyleSheet("""
+    QWidget {
+        background-image: url(71rq+laPZIL._UF1000,1000_QL80_.jpg);
+        background-repeat: no-repeat;
+        background-position: center;
+    }
+""")
 
 sys.exit(app.exec())
