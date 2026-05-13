@@ -1,6 +1,8 @@
 import sys
 # from guess_number_game import play_level, start_game, play_again
-from pathlib import Path
+from PyQt6.QtGui import QPixmap
+
+
 
 from PyQt6.QtWidgets import (
     QApplication,
@@ -9,33 +11,31 @@ from PyQt6.QtWidgets import (
     QPushButton,
     QVBoxLayout,
     QLineEdit,
+    QMainWindow
 )
 
 
 
-class GuessNumberGame(QWidget):
+class GuessNumberGame(QMainWindow):
     def __init__(self):
         super().__init__()
 
         self.setWindowTitle('Guess The Number')
-        self.resize(450, 500)
+        self.resize(400, 400)
 
-        layout = QVBoxLayout()
+        self.background = QLabel(self)
+        
+        # Load your image
+        pixmap = QPixmap("Assets/images/imp2.jpg")
+        self.background.setPixmap(pixmap)
+        
+        # Force the image to scale and fill the entire label area
+        self.background.setScaledContents(True)
 
-        self.setLayout(layout)
-
-        image_path = Path(__file__).parent / "Assets" / "images" / "depar.jpg"
-
-        print(image_path)
-        print(image_path.exists())
-
-        self.setStyleSheet("""
-            QWidget {
-                background-image: url({image_path.as_posix()});
-                background-repeat: no-repeat;
-                background-position: center;
-            }
-        """)
+    def resizeEvent(self, event):
+        # Dynamically resize the label to match the window size
+        self.background.resize(self.size())
+        super().resizeEvent(event)
 
 app = QApplication(sys.argv)
 
