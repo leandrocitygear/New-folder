@@ -4,7 +4,7 @@ import threading
 
 
 def song():
-    data, fs  = soundfile.read('Guess_Num_Game/Nujabes - sea of cloud.flac')
+    data, fs  = soundfile.read('Assets/music/Nujabes - sea of cloud.flac')
 
     sounddevice.play(data, fs)
     sounddevice.wait()
