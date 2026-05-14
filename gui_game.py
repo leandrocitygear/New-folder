@@ -5,7 +5,7 @@ from pathlib import Path
 import random
 from PyQt6.QtCore import QTimer
 
-# import play_song
+import play_song
 
 
 
@@ -20,7 +20,7 @@ from PyQt6.QtWidgets import (
 )
 
 
-# play_song.play_game_song()
+play_song.play_game_song()
 
 class GuessNumberGame(QMainWindow):
     def __init__(self):
@@ -71,6 +71,10 @@ class GuessNumberGame(QMainWindow):
         # Dynamically resize the label to match the window size
         self.background.resize(self.size())
         super().resizeEvent(event)
+
+    def closeEvent(self, event):
+        play_song.stop_music()
+        event.accept()
 
 app = QApplication(sys.argv)
 

@@ -1,5 +1,4 @@
 import random
-import sounddevice
 import play_song
 
 play_song.play_game_song()
@@ -66,7 +65,7 @@ def play_again():
         
         elif again == 'n':
             print('Thank you for playing!')
-            sounddevice.stop()
+            play_song.stop_music()
             break
         else:
             print('please enter (y/n): ')
