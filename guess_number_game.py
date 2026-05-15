@@ -1,7 +1,5 @@
 import random
-import play_song
 
-play_song.play_game_song()
 name = str(input('Enter your name: '))
 
 def play_level(level_name, min_num, max_num):
@@ -37,7 +35,7 @@ def play_level(level_name, min_num, max_num):
         except ValueError:
             print('Please enter a number')
 
-def start_game():
+def run_game():
     print(f'Lets play Guess The Number, {name}!')
     print('You get 3 attemps per level.')
 
@@ -61,14 +59,13 @@ def play_again():
         again = input('would you like to play again ? (y/n): ').lower()
 
         if again == 'y':
-            start_game()
+            run_game()
         
         elif again == 'n':
             print('Thank you for playing!')
-            play_song.stop_music()
             break
         else:
             print('please enter (y/n): ')
 
-start_game()
+run_game()
 play_again()
