@@ -6,7 +6,7 @@ import random
 from PyQt6.QtCore import QTimer
 
 import play_song
-import guess_number_game
+from guess_number_game import GameLogic
 
 
 
@@ -45,6 +45,17 @@ class GuessNumberGame(QMainWindow):
         self.name_input.setGeometry(100, 140, 200, 40)
         self.name_input.hide()
 
+        self.info_label = QLabel("Enter a Number", self)
+        self.info_label.setGeometry(70, 200, 300, 40)
+        self.info_label.hide()
+
+        self.guess_input = QLineEdit(self)
+        self.guess_input.setGeometry(100, 250, 200, 40)
+        self.guess_input.hide()
+
+        self.result_label = QLabel("", self)
+        self.result_label.setGeometry(70, 300, 300, 40)
+        self.result_label.hide()
    
 
         self.image_folder = Path(__file__).parent / "Assets" / "images"
@@ -80,12 +91,66 @@ class GuessNumberGame(QMainWindow):
         self.name_label.show()
         self.name_input.show()
 
+        self.name_input.returnPressed.connect(self.setup_game)
+
+    def setup_game(self):
+
         name = self.name_input.text().strip()
+
+        if not name:
+            return
 
         self.player_name = name
 
-        self.name_input.returnPressed.connect(guess_number_game.run_game)
+        # Create GameLogic object
+        self.game = GameLogic(name)
 
+        # Hide name input
+        self.name_label.hide()
+        self.name_input.hide()
+
+        # Show game widgets
+        self.info_label.show()
+        self.guess_input.show()
+        self.result_label.show()
+
+        level_info = self.game.get_level_info()
+
+        self.info_label.setText(
+            f"{level_info['level_name']} | "
+            f"Guess {level_info['min']} - {level_info['max']}"
+        )
+
+        self.guess_input.returnPressed.connect(self.submit_guess)
+
+    def submit_guess(self):
+
+        guess_text = self.guess_input.text().strip()
+
+        if not guess_text.isdigit():
+            self.result_label.setText("Enter a valid number!")
+            return
+
+        guess = int(guess_text)
+
+        result = self.game.check_guess(guess)
+
+        self.result_label.setText(result["message"])
+
+        if result["status"] == "next_level":
+
+            level_info = self.game.get_level_info()
+
+            self.info_label.setText(
+                f"{level_info['level_name']} | "
+                f"Guess {level_info['min']} - {level_info['max']}"
+            )
+
+        elif result["status"] in ["lose", "game_complete"]:
+
+            self.guess_input.setDisabled(True)
+
+        self.guess_input.clear()
     
 
     def change_background(self):

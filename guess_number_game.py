@@ -1,71 +1,88 @@
 import random
 
-name = str(input('Enter your name: '))
+class GameLogic:
 
-def play_level(level_name, min_num, max_num):
-    print(level_name)
+    def __init__(self, player_name):
+        self.player_name = player_name
 
-    secret_number = random.randint(min_num, max_num)
-    limited_attempts = 3
-    auto_win = 1234
+        self.levels = [
+            ("LEVEL 1", 1, 3),
+            ("LEVEL 2", 1, 6),
+            ("LEVEL 3", 1, 10),
+            ("LEVEL LEGENDARY", 1, 20)
+        ]
 
-    while limited_attempts > 0:
-        try:
-            guess = int(input(f'Enter a number between {min_num} and {max_num}: '))
+        self.current_level_index = 0
+        self.attempts_left = 3
 
-            if guess == secret_number:
-                print('correct')
-                return True
+        self.auto_win = 1234
+        self.generate_secret_number()
+
+    def generate_secret_number(self):
+        level_name, min_num, max_num = self.levels[self.current_level_index]
+        self.secret_number = random.randint(min_num, max_num)
+        print('secret:', self.secret_number)
+
+    def get_level_info(self):
+        level_name, min_num, max_num = self.levels[self.current_level_index]
+
+        return {
+            "level_name": level_name,
+            "min": min_num,
+            "max": max_num,
+            "attempts": self.attempts_left
+        }
+
+    def check_guess(self, guess):
+
+        if guess == self.auto_win:
+            return {
+                "status": "win_game",
+                "message": f"You used the auto win cheat, {self.player_name}!"
+            } 
+        
+        if guess == self.secret_number:
+            self.current_level_index += 1
+
+            if self.current_level_index >= len(self.levels):
+                return {
+                    "status": "game_complete",
+                    "message": f"congratulations {self.player_name}, you beat the game!"
+                }
             
-            elif guess == auto_win:
-                print('You win: ' + name)
-                return False
+            self.attempts_left = 3
+            self.generate_secret_number()
 
-            else:
-                limited_attempts -= 1
+            return {
+                "status": "game_complete",
+                "message": "Correct! Moving to next level"
+            }
 
-                if limited_attempts > 0:
-                    print(f'Incorrect you have: {limited_attempts} attempts left')
+        self.attempts_left -= 1
+        if self.attempts_left <= 0:
 
-                else:
-                    print('game over')
-                    print(f'The correct number was: {secret_number}')
-                    return False
-                
-        except ValueError:
-            print('Please enter a number')
+            return {
+                "status": "lose",
+                "message": "Game Over!"
+            }
+        
+        return {
+            "status": "wrong",
+            "message": f"Wrong! Attempts left: {self.attempts_left}"
+        }
 
-def run_game():
-    print(f'Lets play Guess The Number, {name}!')
-    print('You get 3 attemps per level.')
-
-    level_1 = play_level('LEVEL 1 (1-3)', 1, 3)
-
-    if level_1:
-        level_2 = play_level('LEVEL 2 (1-6)', 1, 6)
-
-        if level_2:
-            level_3 = play_level('LEVEL 3 (1-10)', 1, 10)
-
-            if level_3:
-                level_legendary = play_level('LEVEL LEGENDARY (1-20)', 1, 20)
-
-                if level_legendary:
-                    print(f'Congratulations {name}, you beat the game!')
    
 
-def play_again():
-    while True:
-        again = input('would you like to play again ? (y/n): ').lower()
+    # def play_again():
+    #     while True:
+    #         again = input('would you like to play again ? (y/n): ').lower()
 
-        if again == 'y':
-            run_game()
-        
-        elif again == 'n':
-            print('Thank you for playing!')
-            break
-        else:
-            print('please enter (y/n): ')
+    #         if again == 'y':
+            
+    #         elif again == 'n':
+    #             print('Thank you for playing!')
+    #             break
+    #         else:
+    #             print('please enter (y/n): ')
 
-run_game()
-play_again()
+    # play_again()
