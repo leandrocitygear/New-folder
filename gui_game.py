@@ -33,12 +33,13 @@ class GuessNumberGame(QMainWindow):
 
 
         self.start_button = QPushButton("Start Game", self)
-        self.start_button.setGeometry(125, 200, 150, 50)
+        self.start_button.setGeometry(125, 140, 150, 40)
         self.start_button.clicked.connect(self.start_game)
         self.start_button.raise_()
 
         self.name_label = QLabel("Enter Your Name:", self)
         self.name_label.setGeometry(120, 100, 200, 30)
+        self.name_label.setStyleSheet("color: black; font-size: 20px;")
         self.name_label.hide()
 
         self.name_input = QLineEdit(self)
@@ -148,7 +149,7 @@ class GuessNumberGame(QMainWindow):
 
         elif result["status"] in ["lose", "game_complete"]:
 
-            self.guess_input.setDisabled(True)
+            self.guess_input.setDisabled(False)
 
         self.guess_input.clear()
     
