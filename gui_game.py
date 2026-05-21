@@ -38,8 +38,8 @@ class GuessNumberGame(QMainWindow):
         self.start_button.raise_()
 
         self.name_label = QLabel("Enter Your Name:", self)
-        self.name_label.setGeometry(120, 100, 200, 30)
-        self.name_label.setStyleSheet("color: black; font-size: 20px;")
+        self.name_label.setGeometry(125, 100, 200, 30)
+        self.name_label.setStyleSheet("color: black; font-size: 18px;")
         self.name_label.hide()
 
         self.name_input = QLineEdit(self)
@@ -51,7 +51,7 @@ class GuessNumberGame(QMainWindow):
         self.info_label.hide()
 
         self.guess_input = QLineEdit(self)
-        self.guess_input.setGeometry(100, 250, 200, 40)
+        self.guess_input.setGeometry(100, 140, 200, 40)
         self.guess_input.hide()
 
         self.result_label = QLabel("", self)
@@ -81,6 +81,10 @@ class GuessNumberGame(QMainWindow):
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.change_background)
         self.timer.start(10000)
+
+        self.result_timer = QTimer(self)
+        self.result_timer.setSingleShot(True)
+        self.result_timer.timeout.connect(self.result_label.hide)
 
         self.background.setScaledContents(True)
         # Force the image to scale and fill the entire label area
@@ -130,6 +134,8 @@ class GuessNumberGame(QMainWindow):
 
         if not guess_text.isdigit():
             self.result_label.setText("Enter a valid number!")
+            self.result_label.show()
+            self.result_timer.start(5000)
             return
 
         guess = int(guess_text)
@@ -137,6 +143,8 @@ class GuessNumberGame(QMainWindow):
         result = self.game.check_guess(guess)
 
         self.result_label.setText(result["message"])
+        self.result_label.show()
+        self.result_timer.start(5000)
 
         if result["status"] == "next_level":
 
