@@ -54,11 +54,12 @@ class GameLogic:
             self.generate_secret_number()
 
             return {
-                "status": "game_complete",
+                "status": "next_level",
                 "message": "Correct! Moving to next level"
             }
 
         self.attempts_left -= 1
+
         if self.attempts_left <= 0:
 
             return {

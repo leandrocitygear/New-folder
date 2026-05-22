@@ -37,6 +37,12 @@ class GuessNumberGame(QMainWindow):
         self.start_button.clicked.connect(self.start_game)
         self.start_button.raise_()
 
+        self.play_again_button = QPushButton("Play Again", self)
+        self.play_again_button.setGeometry(125, 140, 150, 40)
+        self.play_again_button.clicked.connect(self.start_game)
+        self.play_again_button.hide()
+        self.play_again_button.raise_()
+
         self.name_label = QLabel("Enter Your Name:", self)
         self.name_label.setGeometry(125, 100, 200, 30)
         self.name_label.setStyleSheet("color: black; font-size: 18px;")
@@ -47,8 +53,12 @@ class GuessNumberGame(QMainWindow):
         self.name_input.hide()
 
         self.info_label = QLabel("Enter a Number", self)
-        self.info_label.setGeometry(70, 200, 300, 40)
+        self.info_label.setGeometry(125, 100, 200, 30)
         self.info_label.hide()
+        
+        self.level_label = QLabel(self)
+        self.level_label.setGeometry(125, 70, 200, 30)
+        self.level_label.hide()
 
         self.guess_input = QLineEdit(self)
         self.guess_input.setGeometry(100, 140, 200, 40)
@@ -80,7 +90,7 @@ class GuessNumberGame(QMainWindow):
 
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.change_background)
-        self.timer.start(10000)
+        self.timer.start(20000)
 
         self.result_timer = QTimer(self)
         self.result_timer.setSingleShot(True)
@@ -97,6 +107,10 @@ class GuessNumberGame(QMainWindow):
         self.name_input.show()
 
         self.name_input.returnPressed.connect(self.setup_game)
+
+    def play_again(self):
+        self.play_again_button.hide()
+        self.play_again_button.clicked.connect(self.setup_game)
 
     def setup_game(self):
 
@@ -118,13 +132,18 @@ class GuessNumberGame(QMainWindow):
         self.info_label.show()
         self.guess_input.show()
         self.result_label.show()
+        self.level_label.show()
+
 
         level_info = self.game.get_level_info()
+        
 
-        self.info_label.setText(
+        self.level_label.setText(
             f"{level_info['level_name']} | "
             f"Guess {level_info['min']} - {level_info['max']}"
         )
+
+        
 
         self.guess_input.returnPressed.connect(self.submit_guess)
 
@@ -135,7 +154,7 @@ class GuessNumberGame(QMainWindow):
         if not guess_text.isdigit():
             self.result_label.setText("Enter a valid number!")
             self.result_label.show()
-            self.result_timer.start(5000)
+            self.result_timer.start(3000)
             return
 
         guess = int(guess_text)
@@ -144,20 +163,21 @@ class GuessNumberGame(QMainWindow):
 
         self.result_label.setText(result["message"])
         self.result_label.show()
-        self.result_timer.start(5000)
+        self.result_timer.start(3000)
 
         if result["status"] == "next_level":
 
             level_info = self.game.get_level_info()
 
-            self.info_label.setText(
+            self.level_label.setText(
                 f"{level_info['level_name']} | "
                 f"Guess {level_info['min']} - {level_info['max']}"
             )
 
         elif result["status"] in ["lose", "game_complete"]:
 
-            self.guess_input.setDisabled(False)
+            self.guess_input.hide()
+            self.play_again_button.show()
 
         self.guess_input.clear()
     
