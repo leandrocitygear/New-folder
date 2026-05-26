@@ -38,7 +38,7 @@ class GuessNumberGame(QMainWindow):
         self.start_button.raise_()
 
         self.play_again_button = QPushButton("Play Again", self)
-        self.play_again_button.setGeometry(125, 140, 150, 40)
+        self.play_again_button.setGeometry(125, 240, 150, 40)
         self.play_again_button.clicked.connect(self.start_game)
         self.play_again_button.hide()
         self.play_again_button.raise_()
@@ -65,7 +65,7 @@ class GuessNumberGame(QMainWindow):
         self.guess_input.hide()
 
         self.result_label = QLabel("", self)
-        self.result_label.setGeometry(70, 300, 300, 40)
+        self.result_label.setGeometry(125, 200, 200, 40)
         self.result_label.hide()
    
 
@@ -108,25 +108,24 @@ class GuessNumberGame(QMainWindow):
 
         self.name_input.returnPressed.connect(self.setup_game)
 
-    def play_again(self):
-        self.play_again_button.hide()
-        self.play_again_button.clicked.connect(self.setup_game)
 
     def setup_game(self):
 
-        name = self.name_input.text().strip()
+       if not hasattr(self, "game"):
 
-        if not name:
+        player_name = self.name_input.text().strip()
+
+        if not player_name:
             return
 
-        self.player_name = name
+        self.player_name = player_name
 
-        # Create GameLogic object
-        self.game = GameLogic(name)
+        self.game = GameLogic(player_name)
 
         # Hide name input
         self.name_label.hide()
         self.name_input.hide()
+
 
         # Show game widgets
         self.info_label.show()
@@ -146,6 +145,17 @@ class GuessNumberGame(QMainWindow):
         
 
         self.guess_input.returnPressed.connect(self.submit_guess)
+        self.play_again_button.hide()
+
+    def play_again(self):
+
+        self.game = GameLogic(self.player_name)
+
+        self.guess_input.show()
+        self.level_label.show()
+        self.info_label.show()
+
+        self.setup_game()
 
     def submit_guess(self):
 
@@ -177,6 +187,8 @@ class GuessNumberGame(QMainWindow):
         elif result["status"] in ["lose", "game_complete"]:
 
             self.guess_input.hide()
+            self.level_label.hide()
+            self.info_label.hide()
             self.play_again_button.show()
 
         self.guess_input.clear()
