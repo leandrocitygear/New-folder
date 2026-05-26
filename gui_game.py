@@ -62,6 +62,7 @@ class GuessNumberGame(QMainWindow):
 
         self.guess_input = QLineEdit(self)
         self.guess_input.setGeometry(100, 140, 200, 40)
+        self.guess_input.returnPressed.connect(self.submit_guess)
         self.guess_input.hide()
 
         self.result_label = QLabel("", self)
@@ -143,12 +144,31 @@ class GuessNumberGame(QMainWindow):
 
         
 
-        self.guess_input.returnPressed.connect(self.submit_guess)
         self.play_again_button.hide()
+        self.result_label.hide()
 
     def play_again(self):
+            # stop old timer
+        self.result_timer.stop()
 
-        self.game = GameLogic(self.player_name)
+        # create NEW game logic
+        # self.game = GameLogic(self.player_name)
+
+        # clear old text
+        self.guess_input.clear()
+
+        # show widgets again
+        # self.guess_input.show()
+        # self.level_label.show()
+        # self.info_label.show()
+
+        # hide play again button
+        # self.play_again_button.hide()
+
+        # reset labels
+        # self.info_label.setText("Enter a number")
+
+        # start first level again
         self.setup_game()
 
 
@@ -180,11 +200,12 @@ class GuessNumberGame(QMainWindow):
             )
 
         elif result["status"] in ["lose", "game_complete"]:
-
             self.guess_input.hide()
             self.level_label.hide()
             self.info_label.hide()
+            self.result_timer.stop()
             self.play_again_button.show()
+            return
 
         self.guess_input.clear()
     
