@@ -39,7 +39,7 @@ class GuessNumberGame(QMainWindow):
 
         self.play_again_button = QPushButton("Play Again", self)
         self.play_again_button.setGeometry(125, 240, 150, 40)
-        self.play_again_button.clicked.connect(self.start_game)
+        self.play_again_button.clicked.connect(self.play_again)
         self.play_again_button.hide()
         self.play_again_button.raise_()
 
@@ -111,16 +111,15 @@ class GuessNumberGame(QMainWindow):
 
     def setup_game(self):
 
-       if not hasattr(self, "game"):
 
-        player_name = self.name_input.text().strip()
+        name = self.name_input.text().strip()
 
-        if not player_name:
+        if not name:
             return
 
-        self.player_name = player_name
+        self.player_name = name
 
-        self.game = GameLogic(player_name)
+        self.game = GameLogic(self.player_name)
 
         # Hide name input
         self.name_label.hide()
@@ -150,12 +149,8 @@ class GuessNumberGame(QMainWindow):
     def play_again(self):
 
         self.game = GameLogic(self.player_name)
-
-        self.guess_input.show()
-        self.level_label.show()
-        self.info_label.show()
-
         self.setup_game()
+
 
     def submit_guess(self):
 
