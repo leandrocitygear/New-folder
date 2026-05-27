@@ -4,7 +4,7 @@ from PyQt6.QtGui import QPixmap
 from pathlib import Path
 import random
 from PyQt6.QtCore import QTimer
-
+import database
 import play_song
 from guess_number_game import GameLogic
 
@@ -26,6 +26,8 @@ play_song.play_game_song()
 class GuessNumberGame(QMainWindow):
     def __init__(self):
         super().__init__()
+
+        database.create_table()
 
         self.setWindowTitle('Guess The Number')
         self.resize(400, 400)
@@ -68,6 +70,9 @@ class GuessNumberGame(QMainWindow):
         self.result_label = QLabel("", self)
         self.result_label.setGeometry(125, 200, 200, 40)
         self.result_label.hide()
+
+        self.leaderboard_button = QPushButton("Leaderboard", self)
+        
    
 
         self.image_folder = Path(__file__).parent / "Assets" / "images"
@@ -152,7 +157,7 @@ class GuessNumberGame(QMainWindow):
         self.result_timer.stop()
 
         # create NEW game logic
-        # self.game = GameLogic(self.player_name)
+        self.game = GameLogic(self.player_name)
 
         # clear old text
         self.guess_input.clear()
@@ -200,6 +205,12 @@ class GuessNumberGame(QMainWindow):
             )
 
         elif result["status"] in ["lose", "game_complete"]:
+
+            database.save_progress(
+                self.player_name,
+                self.game.current_level_index + 1
+            )
+
             self.guess_input.hide()
             self.level_label.hide()
             self.info_label.hide()
@@ -222,6 +233,25 @@ class GuessNumberGame(QMainWindow):
         pixmap = QPixmap(str(chosen_image))
 
         self.background.setPixmap(pixmap)
+
+    def show_leaderboard(self):
+
+        leaders = database.get_leaderboard()
+
+        text = "LEADERBOARD\n\n"
+
+        level_names = {
+            1: "LEVEL 1",
+            2: "LEVEL 2",
+            3: "LEVEL 3",
+            4: "LEVEL LEGENDARY"
+        }
+
+        for name, level in leaders:
+            text += f"{name} - {level_names[level]}\n"
+
+        self.result_label.setText(text)
+        self.result_label.show()
 
     def resizeEvent(self, event):
         # Dynamically resize the label to match the window size
