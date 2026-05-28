@@ -28,6 +28,7 @@ class GuessNumberGame(QMainWindow):
         super().__init__()
 
         database.create_table()
+        # database.clear_database()
 
         self.setWindowTitle('Guess The Number')
         self.resize(400, 400)
@@ -72,6 +73,23 @@ class GuessNumberGame(QMainWindow):
         self.result_label.hide()
 
         self.leaderboard_button = QPushButton("Leaderboard", self)
+        self.leaderboard_button.setGeometry(100, 30, 200, 40)
+        self.leaderboard_button.clicked.connect(self.show_leaderboard)
+        self.leaderboard_button.raise_()
+        self.leaderboard_button.hide()
+
+        self.leaderboard_window = QWidget()
+        self.leaderboard_window.setWindowTitle("Leaderboard")
+        self.leaderboard_window.resize(300, 300)
+        self.leaderboard_window.setStyleSheet("background-color: white;")
+        self.leaderboard_window.hide()
+
+        self.leaderboard_label = QLabel(self.leaderboard_window)
+        self.leaderboard_label.setGeometry(20, 20, 260, 260)
+
+
+
+
         
    
 
@@ -175,6 +193,7 @@ class GuessNumberGame(QMainWindow):
 
         # start first level again
         self.setup_game()
+        self.leaderboard_button.hide()
 
 
     def submit_guess(self):
@@ -206,16 +225,18 @@ class GuessNumberGame(QMainWindow):
 
         elif result["status"] in ["lose", "game_complete"]:
 
-            database.save_progress(
-                self.player_name,
-                self.game.current_level_index + 1
-            )
+            if self.game.current_level_index > 0:
+                database.save_progress(
+                    self.player_name,
+                    self.game.current_level_index
+                )
 
             self.guess_input.hide()
             self.level_label.hide()
             self.info_label.hide()
             self.result_timer.stop()
             self.play_again_button.show()
+            self.leaderboard_button.show()
             return
 
         self.guess_input.clear()
@@ -236,6 +257,8 @@ class GuessNumberGame(QMainWindow):
 
     def show_leaderboard(self):
 
+
+
         leaders = database.get_leaderboard()
 
         text = "LEADERBOARD\n\n"
@@ -248,10 +271,10 @@ class GuessNumberGame(QMainWindow):
         }
 
         for name, level in leaders:
-            text += f"{name} - {level_names[level]}\n"
+            text += f"{name} - {level_names.get(level, 'FAIL')}\n"
 
-        self.result_label.setText(text)
-        self.result_label.show()
+        self.leaderboard_label.setText(text)
+        self.leaderboard_window.show()
 
     def resizeEvent(self, event):
         # Dynamically resize the label to match the window size

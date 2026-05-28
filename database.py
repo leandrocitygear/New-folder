@@ -67,3 +67,24 @@ def get_leaderboard():
     conn.close()
 
     return players
+
+def remove_invalid_levels():
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute("""
+        DELETE FROM player_progress
+        WHERE max_level > 4
+    """)
+
+    conn.commit()
+    conn.close()
+
+def clear_database():
+    conn = connect()
+    cursor = conn.cursor()
+
+    cursor.execute("DELETE FROM player_progress")
+
+    conn.commit()
+    conn.close()
