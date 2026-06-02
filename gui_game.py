@@ -41,7 +41,7 @@ class GuessNumberGame(QMainWindow):
         self.start_button.raise_()
 
         self.play_again_button = QPushButton("Play Again", self)
-        self.play_again_button.setGeometry(125, 240, 150, 40)
+        self.play_again_button.setGeometry(210, 340, 150, 40)
         self.play_again_button.clicked.connect(self.play_again)
         self.play_again_button.hide()
         self.play_again_button.raise_()
@@ -69,23 +69,42 @@ class GuessNumberGame(QMainWindow):
         self.guess_input.hide()
 
         self.result_label = QLabel("", self)
-        self.result_label.setGeometry(125, 200, 200, 40)
+        self.result_label.setGeometry(125, 300, 200, 40)
         self.result_label.hide()
 
         self.leaderboard_button = QPushButton("Leaderboard", self)
-        self.leaderboard_button.setGeometry(100, 30, 200, 40)
+        self.leaderboard_button.setGeometry(40, 340, 150, 40)
         self.leaderboard_button.clicked.connect(self.show_leaderboard)
         self.leaderboard_button.raise_()
         self.leaderboard_button.hide()
 
-        self.leaderboard_window = QWidget()
+        self.leaderboard_window = QWidget(self)
         self.leaderboard_window.setWindowTitle("Leaderboard")
         self.leaderboard_window.resize(300, 300)
-        self.leaderboard_window.setStyleSheet("background-color: white;")
+        self.leaderboard_window.move(
+            self.geometry().center() - self.leaderboard_window.rect().center()
+        )
+        self.leaderboard_window.setStyleSheet("""
+            QWidget {
+                border-image: url(Assets/images/leader_img.webp) 0 0 0 0 stretch stretch;
+                
+                
+            }
+        """)
         self.leaderboard_window.hide()
 
         self.leaderboard_label = QLabel(self.leaderboard_window)
         self.leaderboard_label.setGeometry(20, 20, 260, 260)
+        self.leaderboard_label.setStyleSheet("""
+            QLabel {
+                border-image: none;
+                color: white;
+                padding: 10px;
+                font-size: 14px;
+                background-color: rgba(0, 0, 0, 10);
+                
+            }
+        """)
 
 
 
@@ -179,21 +198,9 @@ class GuessNumberGame(QMainWindow):
 
         # clear old text
         self.guess_input.clear()
-
-        # show widgets again
-        # self.guess_input.show()
-        # self.level_label.show()
-        # self.info_label.show()
-
-        # hide play again button
-        # self.play_again_button.hide()
-
-        # reset labels
-        # self.info_label.setText("Enter a number")
-
-        # start first level again
         self.setup_game()
         self.leaderboard_button.hide()
+        self.leaderboard_window.hide()
 
 
     def submit_guess(self):

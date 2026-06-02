@@ -8,11 +8,13 @@ def connect():
 def create_table():
     conn = connect()
     cursor = conn.cursor()
+
+
     
     cursor.execute("""
         CREATE TABLE IF NOT EXISTS player_progress (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
-            player_name TEXT UNIQUE,
+            player_name TEXT,
             max_level INTEGER             
         )
     """)
@@ -23,30 +25,12 @@ def save_progress(player_name, level):
     conn = connect()
     cursor = conn.cursor()
 
+
     cursor.execute("""
-        SELECT max_level 
-        FROM player_progress
-        WHERE player_name = ? 
-    """, (player_name,))
+        INSERT INTO player_progress (player_name, max_level)
+        VALUES (?, ?)
+    """, (player_name, level))
 
-    result = cursor.fetchone()
-
-    if result is None:
-
-        cursor.execute("""
-            INSERT INTO player_progress (player_name, max_level)
-            VALUES (?, ?)
-        """, (player_name, level))
-
-    else:
-        current_max = result[0]
-
-        if level > current_max:
-            cursor.execute("""
-                UPDATE player_progress
-                SET max_level = ?
-                WHERE player_name = ?
-            """, (level, player_name))
     
     conn.commit()
     conn.close()
@@ -58,7 +42,7 @@ def get_leaderboard():
     cursor.execute("""
         SELECT player_name, max_level
         FROM player_progress
-        ORDER BY max_level DESC
+        ORDER BY id DESC
         LIMIT 10
     """)
 
