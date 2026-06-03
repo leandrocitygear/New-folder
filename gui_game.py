@@ -31,7 +31,7 @@ class GuessNumberGame(QMainWindow):
         # database.clear_database()
 
         self.setWindowTitle('Guess The Number')
-        self.resize(400, 400)
+        self.resize(500, 500)
 
 
 
@@ -40,8 +40,9 @@ class GuessNumberGame(QMainWindow):
         self.start_button.clicked.connect(self.start_game)
         self.start_button.raise_()
 
-        self.play_again_button = QPushButton("Play Again", self)
-        self.play_again_button.setGeometry(210, 340, 150, 40)
+        self.play_again_button = QPushButton("PLAY AGAIN", self)
+        self.play_again_button.setGeometry(270, 450, 150, 40)
+        self.play_again_button.setStyleSheet("font-size: 16px;")
         self.play_again_button.clicked.connect(self.play_again)
         self.play_again_button.hide()
         self.play_again_button.raise_()
@@ -72,15 +73,16 @@ class GuessNumberGame(QMainWindow):
         self.result_label.setGeometry(125, 300, 200, 40)
         self.result_label.hide()
 
-        self.leaderboard_button = QPushButton("Leaderboard", self)
-        self.leaderboard_button.setGeometry(40, 340, 150, 40)
+        self.leaderboard_button = QPushButton("LEADERBOARD", self)
+        self.leaderboard_button.setGeometry(80, 450, 150, 40)
+        self.leaderboard_button.setStyleSheet("font-size: 16px;")
         self.leaderboard_button.clicked.connect(self.show_leaderboard)
         self.leaderboard_button.raise_()
         self.leaderboard_button.hide()
 
         self.leaderboard_window = QWidget(self)
         self.leaderboard_window.setWindowTitle("Leaderboard")
-        self.leaderboard_window.resize(300, 300)
+        self.leaderboard_window.resize(375, 375)
         self.leaderboard_window.move(
             self.geometry().center() - self.leaderboard_window.rect().center()
         )
@@ -94,14 +96,15 @@ class GuessNumberGame(QMainWindow):
         self.leaderboard_window.hide()
 
         self.leaderboard_label = QLabel(self.leaderboard_window)
-        self.leaderboard_label.setGeometry(20, 20, 260, 260)
+        self.leaderboard_label.resize(375, 375)
+        
         self.leaderboard_label.setStyleSheet("""
             QLabel {
                 border-image: none;
                 color: white;
                 padding: 10px;
-                font-size: 14px;
-                background-color: rgba(0, 0, 0, 10);
+                font-size: 20px;
+                background-color: rgba(0, 0, 0, 100);
                 
             }
         """)
@@ -264,6 +267,10 @@ class GuessNumberGame(QMainWindow):
 
     def show_leaderboard(self):
 
+        if self.leaderboard_window.isVisible():
+            self.leaderboard_window.hide()
+        else:
+            self.leaderboard_window.show()
 
 
         leaders = database.get_leaderboard()
@@ -281,7 +288,6 @@ class GuessNumberGame(QMainWindow):
             text += f"{name} - {level_names.get(level, 'FAIL')}\n"
 
         self.leaderboard_label.setText(text)
-        self.leaderboard_window.show()
 
     def resizeEvent(self, event):
         # Dynamically resize the label to match the window size
@@ -291,6 +297,7 @@ class GuessNumberGame(QMainWindow):
     def closeEvent(self, event):
         play_song.stop_music()
         event.accept()
+
 
 
 app = QApplication(sys.argv)
