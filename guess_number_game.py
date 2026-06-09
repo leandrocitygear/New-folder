@@ -35,11 +35,6 @@ class GameLogic:
 
     def check_guess(self, guess):
 
-        if guess == self.auto_win:
-            return {
-                "status": "win_game",
-                "message": f"You used the auto win cheat, {self.player_name}!"
-            } 
         
         if guess == self.secret_number:
             self.current_level_index += 1
@@ -47,7 +42,7 @@ class GameLogic:
             if self.current_level_index >= len(self.levels):
                 return {
                     "status": "game_complete",
-                    "message": f"congratulations {self.player_name}, you beat the game!"
+                    "message": f"{self.player_name}, you win!"
                 }
             
             self.attempts_left = 3
@@ -72,18 +67,3 @@ class GameLogic:
             "message": f"Wrong! Attempts left: {self.attempts_left}"
         }
 
-   
-
-    # def play_again():
-    #     while True:
-    #         again = input('would you like to play again ? (y/n): ').lower()
-
-    #         if again == 'y':
-            
-    #         elif again == 'n':
-    #             print('Thank you for playing!')
-    #             break
-    #         else:
-    #             print('please enter (y/n): ')
-
-    # play_again()

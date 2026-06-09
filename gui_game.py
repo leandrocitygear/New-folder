@@ -4,6 +4,7 @@ from PyQt6.QtGui import QPixmap
 from pathlib import Path
 import random
 from PyQt6.QtCore import QTimer
+from PyQt6.QtCore import Qt
 import database
 import play_song
 from guess_number_game import GameLogic
@@ -36,7 +37,7 @@ class GuessNumberGame(QMainWindow):
 
 
         self.start_button = QPushButton("Start Game", self)
-        self.start_button.setGeometry(125, 140, 150, 40)
+        self.start_button.setGeometry(175, 230, 150, 40)
         self.start_button.clicked.connect(self.start_game)
         self.start_button.raise_()
 
@@ -48,29 +49,36 @@ class GuessNumberGame(QMainWindow):
         self.play_again_button.raise_()
 
         self.name_label = QLabel("Enter Your Name:", self)
-        self.name_label.setGeometry(125, 100, 200, 30)
-        self.name_label.setStyleSheet("color: black; font-size: 18px;")
+        self.name_label.setGeometry(175, 200, 150, 30)
+        self.name_label.setStyleSheet("color: black; font-size: 18px; background-color: rgba(255, 255, 255, 0.6);")
+        self.name_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.name_label.hide()
 
         self.name_input = QLineEdit(self)
-        self.name_input.setGeometry(100, 140, 200, 40)
+        self.name_input.setGeometry(150, 230, 200, 40)
         self.name_input.hide()
 
-        self.info_label = QLabel("Enter a Number", self)
-        self.info_label.setGeometry(125, 100, 200, 30)
+        self.info_label = QLabel("Enter a Number:", self)
+        self.info_label.setGeometry(185, 200, 130, 30)
+        self.info_label.setStyleSheet("color: black; font-size: 16px; background-color: rgba(255, 255, 255, 0.6);")
+        self.info_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.info_label.hide()
         
         self.level_label = QLabel(self)
-        self.level_label.setGeometry(125, 70, 200, 30)
+        self.level_label.setGeometry(112, 160, 275, 30)
+        self.level_label.setStyleSheet("color: black; font-size: 18px; background-color: rgba(255, 255, 255, 0.6);")
+        self.level_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.level_label.hide()
 
         self.guess_input = QLineEdit(self)
-        self.guess_input.setGeometry(100, 140, 200, 40)
+        self.guess_input.setGeometry(150, 230, 200, 40)
         self.guess_input.returnPressed.connect(self.submit_guess)
         self.guess_input.hide()
 
         self.result_label = QLabel("", self)
-        self.result_label.setGeometry(125, 300, 200, 40)
+        self.result_label.setGeometry(155, 275, 190, 30)
+        self.result_label.setStyleSheet("color: black; font-size: 14px; background-color: rgba(255, 255, 255, 0.6);")
+        self.result_label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.result_label.hide()
 
         self.leaderboard_button = QPushButton("LEADERBOARD", self)
@@ -136,7 +144,7 @@ class GuessNumberGame(QMainWindow):
 
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.change_background)
-        self.timer.start(20000)
+        self.timer.start(5000)
 
         self.result_timer = QTimer(self)
         self.result_timer.setSingleShot(True)
@@ -178,16 +186,12 @@ class GuessNumberGame(QMainWindow):
         self.result_label.show()
         self.level_label.show()
 
-
         level_info = self.game.get_level_info()
-        
 
         self.level_label.setText(
             f"{level_info['level_name']} | "
             f"Guess {level_info['min']} - {level_info['max']}"
         )
-
-        
 
         self.play_again_button.hide()
         self.result_label.hide()
