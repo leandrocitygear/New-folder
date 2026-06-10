@@ -63,12 +63,3 @@ def remove_invalid_levels():
 
     conn.commit()
     conn.close()
-
-def clear_database():
-    conn = connect()
-    cursor = conn.cursor()
-
-    cursor.execute("DELETE FROM player_progress")
-
-    conn.commit()
-    conn.close()

@@ -14,6 +14,9 @@ background_music = [
     music_folder / "Nujabes - Counting Stars.mp3",
     music_folder / "Nujabes - sea of cloud.flac",
     music_folder / "Nujabes - world without words.mp3",
+    music_folder / "tsurugi no mai.mp3",
+    music_folder / "san francisco.mp3",
+    music_folder / "yet why not.mp3"
 ]
 
 current_song = None

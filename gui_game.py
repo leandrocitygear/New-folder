@@ -1,5 +1,4 @@
 import sys
-# from guess_number_game import play_level, start_game, play_again
 from PyQt6.QtGui import QPixmap
 from pathlib import Path
 import random
@@ -8,8 +7,6 @@ from PyQt6.QtCore import Qt
 import database
 import play_song
 from guess_number_game import GameLogic
-
-
 
 from PyQt6.QtWidgets import (
     QApplication,
@@ -21,7 +18,6 @@ from PyQt6.QtWidgets import (
     QMainWindow
 )
 
-
 play_song.play_game_song()
 
 class GuessNumberGame(QMainWindow):
@@ -29,12 +25,9 @@ class GuessNumberGame(QMainWindow):
         super().__init__()
 
         database.create_table()
-        # database.clear_database()
 
         self.setWindowTitle('Guess The Number')
         self.resize(500, 500)
-
-
 
         self.start_button = QPushButton("Start Game", self)
         self.start_button.setGeometry(175, 230, 150, 40)
@@ -117,14 +110,7 @@ class GuessNumberGame(QMainWindow):
             }
         """)
 
-
-
-
-        
-   
-
         self.image_folder = Path(__file__).parent / "Assets" / "images"
-
 
         self.background_images = [
             self.image_folder / "dep2.jpg",
@@ -132,26 +118,28 @@ class GuessNumberGame(QMainWindow):
             self.image_folder / "imp1.jpg",
             self.image_folder / "imp2.jpg",
             self.image_folder / "db.webp",
+            self.image_folder / "imp3.jpg",
+            self.image_folder / "imp4.jpg",
+            self.image_folder / "imp5.jpg",
+            self.image_folder / "imp6.jpg",
+            self.image_folder / "Pg2GU.jpg",
         ]
-
 
         self.background = QLabel(self)
         self.background.lower()
         
-        # Load your image
         self.current_image = None
         self.change_background()
 
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.change_background)
-        self.timer.start(5000)
+        self.timer.start(10000)
 
         self.result_timer = QTimer(self)
         self.result_timer.setSingleShot(True)
         self.result_timer.timeout.connect(self.result_label.hide)
 
         self.background.setScaledContents(True)
-        # Force the image to scale and fill the entire label area
 
     def start_game(self):
 
@@ -162,9 +150,7 @@ class GuessNumberGame(QMainWindow):
 
         self.name_input.returnPressed.connect(self.setup_game)
 
-
     def setup_game(self):
-
 
         name = self.name_input.text().strip()
 
@@ -178,7 +164,6 @@ class GuessNumberGame(QMainWindow):
         # Hide name input
         self.name_label.hide()
         self.name_input.hide()
-
 
         # Show game widgets
         self.info_label.show()
@@ -197,18 +182,15 @@ class GuessNumberGame(QMainWindow):
         self.result_label.hide()
 
     def play_again(self):
-            # stop old timer
+        
         self.result_timer.stop()
 
-        # create NEW game logic
         self.game = GameLogic(self.player_name)
 
-        # clear old text
         self.guess_input.clear()
         self.setup_game()
         self.leaderboard_button.hide()
         self.leaderboard_window.hide()
-
 
     def submit_guess(self):
 
@@ -254,7 +236,6 @@ class GuessNumberGame(QMainWindow):
             return
 
         self.guess_input.clear()
-    
 
     def change_background(self):
 
@@ -275,7 +256,6 @@ class GuessNumberGame(QMainWindow):
             self.leaderboard_window.hide()
         else:
             self.leaderboard_window.show()
-
 
         leaders = database.get_leaderboard()
 
@@ -302,12 +282,9 @@ class GuessNumberGame(QMainWindow):
         play_song.stop_music()
         event.accept()
 
-
-
 app = QApplication(sys.argv)
 
 window = GuessNumberGame()
 window.show()
-
 
 sys.exit(app.exec())
