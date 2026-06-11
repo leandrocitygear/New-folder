@@ -274,7 +274,6 @@ class GuessNumberGame(QMainWindow):
         self.leaderboard_label.setText(text)
 
     def resizeEvent(self, event):
-        # Dynamically resize the label to match the window size
         self.background.resize(self.size())
         super().resizeEvent(event)
 
